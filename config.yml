@@ -1,0 +1,105 @@
+# Copyright 2020 Mike Iacovacci
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+---
+### Which folder contains internal binary object files?
+binary_folder: ".bin"
+
+### Which folder contains command input history files?
+history_folder: ".history"
+
+### Which folder contains toolkit sub-folders where YAML files are stored?
+inventory_folder: "inventory"
+
+### From which folder will The PenTesters Framework (PTF) be executed?
+ptf_folder: ".ptf"
+
+### How many seconds will AXIOM Framework wait for new output after detecting an interactive subprogram's prompt?
+pattern_timeout: 1
+
+### How many seconds will AXIOM Framework wait for new output before sending "ENTER key" to an interactive subprogram?
+safety_timeout: 15
+
+### How many seconds will pexpect pseudo-terminal subprocesses wait before throwing any TIMEOUT exceptions?
+pty_timeout: 0.001
+
+### AXIOM Framework will attempt to download and extract the items listed in "toolkits" when 1) the "inventory_folder"
+### directory is missing and 2) the user explicitly initializes AXIOM Framework. During extraction the listed toolkit
+### names are used to name sub-folders created within the inventory folder. AXIOM Framework expects toolkit data in ZIP
+### format to be available at an HTTP(S) URL. The "file" attribute's value must match the name of the root folder within
+### the ZIP archive. AXIOM Framework does not search for YAML data in nested sub-folders within a toolkit's directory.
+toolkits:
+  - "Demo Toolkit X":
+      - file: "axiom-data-demo-x-master"
+      - url: "https://github.com/mikeiacovacci/axiom-data-demo-x/archive/master.zip"
+  - "Demo Toolkit Y":
+      - file: "axiom-data-demo-y-master"
+      - url: "https://github.com/mikeiacovacci/axiom-data-demo-y/archive/master.zip"
+  - "Demo Toolkit Z":
+      - file: "axiom-data-demo-z-master"
+      - url: "https://github.com/mikeiacovacci/axiom-data-demo-z/archive/master.zip"
+
+### AXIOM Framework utilizes regex pattern matching for detecting interactive subprogram prompts. Regular expressions
+### are modified at runtime to only match at the end of a subprogram output's line. All listed expressions must utilize
+### backslash escaping, as needed, to be properly loaded by Python. Furthermore, prompt type names are case-sensitive.
+prompt_types:
+  - bash: "[$#] "
+  - cmd: "^[a-z]:(.+?)>"
+  - empire: "^[(]Empire(.+?) > "
+  - meterpreter: "\x1b\\[4mmeterpreter\x1b\\[0m > "
+  - mimikatz: "mimikatz \\# "
+  - msfconsole: "\x1b\\[4mmsf(.+?)> "
+  - powershell: "^PS [A-Z]:(.+?)> "
+  - rpcclient: "^rpcclient [$]> "
+  - setoolkit: "\x1b\\[4m\x1b\\[36mset\x1b\\[0m(.+?)"
+  - smbclient: "^smb: \\\\> "
+  - other: null
+
+### Which text file contains the AXIOM Framework logo?
+banner_file: "lib/banner.txt"
+
+### AXIOM Framework uses values listed in "input_types" to 1) interpret command text by identifying the number and type
+### of user inputs a command requires 2) inform the end user about the command input requirements, and 3) creating and
+### updating history files to auto-suggest command inputs. Input type names must be less than or equal to eight
+### characters. End users can add more types, but AXIOM Framework does not attempt any input data validation at all.
+input_types:
+  - DOMAIN
+  - FILE
+  - FULLPATH
+  - HTTPSURL
+  - HTTPURL
+  - INT
+  - INTMENU
+  - INTRANGE
+  - IPV4
+  - IPV4CIDR
+  - IPV4RNGE
+  - IPV6
+  - IPV6CIDR
+  - IPV6RNGE
+  - MAC
+  - RLATVPTH
+  - STR
+  - STRMENU
+  - WEBURL
+
+### All interactive commands must list a PROMPT output specifying the name of the prompt type (matching an item listed
+### in "prompt_types") to be properly detected. AXIOM Framework currently only handles STDOUT and PROMPT output types.
+output_types:
+  - F_INPUT
+  - F_PREFIX
+  - F_STRING
+  - PROMPT
+  - STDERR
+  - STDOUT
+...
